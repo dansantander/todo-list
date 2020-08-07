@@ -1,4 +1,3 @@
-//localStorage.setItem('myLibrary', JSON.stringify(myLibrary));
 import Project from './classes/project';
 import Todo from './classes/todo';
 
