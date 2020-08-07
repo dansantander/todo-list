@@ -1,3 +1,5 @@
+import addProject from '../listController';
+
 const domManipulation = (() => {
   const renderTodo = (todos) => {
     const clear = document.getElementById('todos');
@@ -24,22 +26,65 @@ const domManipulation = (() => {
     });
   };
 
+  const renderProjectTitle = (titleProject) => {
+    const title = document.getElementById('project-header');
+    title.innerHTML = titleProject;
+  };
+
   const renderProject = (projects) => {
     const proj = document.getElementById('projects');
 
     projects.forEach((project) => {
       const li = document.createElement('li');
       li.innerHTML = project.projectName;
+      li.classList.add('project-button');
       proj.appendChild(li);
       li.addEventListener('click', () => {
+        renderProjectTitle(project.projectName);
         renderTodo(project.list);
       });
     });
   };
 
+  const setCancelProjectButton = () => {
+    const projectAddForm = document.getElementById('form-project');
+    projectAddForm.remove();
+    const projectButton = document.getElementById('add-project');
+    projectButton.classList.remove('d-none');
+    projectButton.classList.add('d-inline');
+  };
+
+  const renderFormProject = () => {
+    const projectButton = document.getElementById('add-project');
+    projectButton.classList.remove('d-inline');
+    projectButton.classList.add('d-none');
+    const listProjects = document.getElementById('projects');
+    const div = document.createElement('div');
+    div.setAttribute('id', 'form-project');
+    const input = document.createElement('input');
+    input.setAttribute('id', 'form-project-name');
+    const button = document.createElement('button');
+    const buttonCancel = document.createElement('button');
+    button.innerHTML = 'Add';
+    button.addEventListener('click', addProject);
+    buttonCancel.innerHTML = 'Cancel';
+    buttonCancel.addEventListener('click', setCancelProjectButton);
+    div.appendChild(input);
+    div.appendChild(button);
+    div.appendChild(buttonCancel);
+    listProjects.appendChild(div);
+    input.focus();
+  };
+
+  const setButtonListeners = () => {
+    const projectButton = document.getElementById('add-project');
+    projectButton.addEventListener('click', renderFormProject);
+  };
+
   return {
     renderProject,
-    renderTodo,
+    renderFormProject,
+    setButtonListeners,
   };
 })();
 
