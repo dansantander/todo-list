@@ -1,7 +1,6 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
+import './style.css';
 import checkData from './storageInfo';
-import Project from './classes/project';
+import domManipulation from './render/dom';
 
-console.log('start');
-const list = checkData();
-console.log(list);
+domManipulation.renderProject(checkData());

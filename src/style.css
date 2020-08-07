@@ -5,3 +5,12 @@
   margin: 0;
   box-sizing: border-box;
 }
+
+.logo {
+  height: 150px;
+  width: 200px;
+}
+
+.project-title {
+  height: 150px;
+}

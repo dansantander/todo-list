@@ -2,16 +2,20 @@ import Project from './classes/project';
 import Todo from './classes/todo';
 
 function createDefaultProject() {
+  const today = new Date();
+  // eslint-disable-next-line prefer-template
+  const date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
+
   const array = [];
   const projectNew = new Project('Default Project');
   array.push(projectNew);
-  const activity = new Todo('default', 'write your description', Date.today, 1);
+  const activity = new Todo('default', 'write your description', date, 1);
   projectNew.addList(activity);
   localStorage.setItem('myTodo', JSON.stringify(array));
 }
 
 function checkData() {
-  localStorage.clear('myTodo');
+  // localStorage.clear('myTodo');
   const array = [];
   if (!localStorage.getItem('myTodo')) {
     createDefaultProject();
