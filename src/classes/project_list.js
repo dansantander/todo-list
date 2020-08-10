@@ -1,6 +1,10 @@
 class ProjectList {
-  constructor() {
-    this.projectList = [];
+  constructor(list) {
+    if (!list) {
+      this.projectList = [];
+    } else {
+      this.projectList = list.projectList;
+    }
   }
 
   addProjectsList(project) {
