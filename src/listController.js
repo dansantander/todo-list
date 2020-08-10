@@ -1,11 +1,14 @@
-import checkData from './storageInfo';
+import checkDataStorage from './storageInfo';
 import Project from './classes/project';
+import ProjectList from './classes/project_list';
 
 const addProject = () => {
-  const dataInfo = checkData();
+  console.log(3);
+  const dataInfo = checkDataStorage();
+  console.log(dataInfo);
   const projectName = document.getElementById('form-project-name');
   const projectNew = new Project(projectName.value);
-  dataInfo.push(projectNew);
+  ProjectList.addProjectsList(projectNew);
   localStorage.setItem('myTodo', JSON.stringify(dataInfo));
 };
 

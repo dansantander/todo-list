@@ -1,6 +1,8 @@
 import addProject from '../listController';
+import checkDataStorage from '../storageInfo';
 
 const domManipulation = (() => {
+
   const renderTodo = (todos) => {
     const clear = document.getElementById('todos');
     clear.innerHTML = '';
@@ -33,8 +35,9 @@ const domManipulation = (() => {
 
   const renderProject = (projects) => {
     const proj = document.getElementById('projects');
+    proj.innerHTML = '';
 
-    projects.forEach((project) => {
+    projects.projectList.forEach((project) => {
       const li = document.createElement('li');
       li.innerHTML = project.projectName;
       li.classList.add('project-button');
@@ -46,7 +49,7 @@ const domManipulation = (() => {
     });
   };
 
-  const setCancelProjectButton = () => {
+  const hideForm = () => {
     const projectAddForm = document.getElementById('form-project');
     projectAddForm.remove();
     const projectButton = document.getElementById('add-project');
@@ -55,6 +58,8 @@ const domManipulation = (() => {
   };
 
   const renderFormProject = () => {
+    console.log(1);
+    
     const projectButton = document.getElementById('add-project');
     projectButton.classList.remove('d-inline');
     projectButton.classList.add('d-none');
@@ -66,9 +71,14 @@ const domManipulation = (() => {
     const button = document.createElement('button');
     const buttonCancel = document.createElement('button');
     button.innerHTML = 'Add';
-    button.addEventListener('click', addProject);
+    button.addEventListener('click', () => {
+      console.log(2);
+      addProject();
+      hideForm();
+      // renderProject(checkDataStorage());
+    });
     buttonCancel.innerHTML = 'Cancel';
-    buttonCancel.addEventListener('click', setCancelProjectButton);
+    buttonCancel.addEventListener('click', hideForm);
     div.appendChild(input);
     div.appendChild(button);
     div.appendChild(buttonCancel);
@@ -85,6 +95,7 @@ const domManipulation = (() => {
     renderProject,
     renderFormProject,
     setButtonListeners,
+    hideForm,
   };
 })();
 

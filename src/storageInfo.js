@@ -1,5 +1,7 @@
 import Project from './classes/project';
 import Todo from './classes/todo';
+import ProjectList from './classes/project_list';
+// import projectList from './classes/project_list';
 
 function createDefaultProject() {
   const today = new Date();
@@ -14,29 +16,27 @@ function createDefaultProject() {
   localStorage.setItem('myTodo', JSON.stringify(array));
 }
 
-function checkData() {
+function checkDataStorage() {
   // localStorage.clear('myTodo');
-  const array = [];
-  if (!localStorage.getItem('myTodo')) {
-    createDefaultProject();
-  }
-  if (localStorage.getItem('myTodo')) {
-    const myLocalTodo = JSON.parse((localStorage.getItem('myTodo')));
-    myLocalTodo.forEach((project) => {
-      const { projectName } = project;
-      const projectNew = new Project(projectName);
-      project.list.forEach((todo) => {
-        const {
-          title, description, dueDate, priority, done,
-        } = todo;
-        const todoNew = new Todo(title, description, dueDate, priority);
-        todoNew.done = done;
-        projectNew.addList(todoNew);
-      });
-      array.push(projectNew);
+  const projectList = new ProjectList();
+  const myLocalTodo = JSON.parse((localStorage.getItem('myTodo')));
+
+  myLocalTodo.forEach((project) => {
+    const { projectName } = project;
+    const projectNew = new Project(projectName);
+    project.list.forEach((todo) => {
+      const {
+        title, description, dueDate, priority, done,
+      } = todo;
+      const todoNew = new Todo(title, description, dueDate, priority);
+      todoNew.done = done;
+      projectNew.addList(todoNew);
     });
-  }
-  return array;
+    projectList.addProjectsList(projectNew);
+  });
+
+  return projectList;
 }
 
-export default checkData;
+// export default checkDataStorage;
+export { checkDataStorage, createDefaultProject };
