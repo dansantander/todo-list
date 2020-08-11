@@ -19,3 +19,37 @@
 #add-todo:hover {
   color: #fff;
 }
+
+li {
+  padding: 0.5rem
+}
+
+i {
+  align-self: center;
+}
+
+.logo {
+  background-color: #010c18;
+  width: 100%;
+}
+
+.left-side {
+  background-color: #00070e;
+  min-height: 100vh;
+  min-width: 200px;
+  width: 20%;
+  color: rgb(211, 209, 209);
+}
+
+.project-button {
+  width: 90%;
+}
+
+.left-button {
+  border: none;
+}
+
+#form-project-name {
+  border-radius: 5px;
+  border: none;
+}

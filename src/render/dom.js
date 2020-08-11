@@ -111,7 +111,7 @@ const domManipulation = (() => {
       const todoObject = new Todo(title, description, dueDate, priority);
       changeTodo(indexTodo, indexProject, todoObject);
       hideTodoForm();
-      console.log('test');
+      // eslint-disable-next-line no-use-before-define
       renderTodo(projectListObject.projectList[indexProject].list);
       const allTodo = document.getElementById('todos');
       allTodo.children[indexTodo].lastChild.children[1].click();
@@ -253,14 +253,18 @@ const domManipulation = (() => {
     const listProjects = document.getElementById('projects');
     const div = document.createElement('div');
     div.setAttribute('id', 'form-project');
+    div.classList = 'd-flex flex-column px-2';
     const input = document.createElement('input');
     input.setAttribute('id', 'form-project-name');
+    input.classList = 'align-self-center w-100 px-1';
     const button = document.createElement('button');
     const buttonCancel = document.createElement('button');
     const errorMessage = document.createElement('span');
     errorMessage.classList.add('d-none');
     errorMessage.innerHTML = 'This field must not be empty';
     button.innerHTML = 'Add';
+    button.classList.add('left-button');
+    buttonCancel.classList.add('left-button');
 
     button.addEventListener('click', () => {
       const projectName = document.getElementById('form-project-name');
