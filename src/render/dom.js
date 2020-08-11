@@ -1,4 +1,4 @@
-import { addProject, removeProject } from '../listController';
+import { addProject, removeProject, addTodo } from '../listController';
 // import addProject from '../listController';
 import projectListObject from '../storageInfo';
 
@@ -28,9 +28,29 @@ const domManipulation = (() => {
     });
   };
 
-  const renderProjectTitle = (titleProject) => {
+  const renderProjectHeader = (titleProject, index) => {
     const title = document.getElementById('project-header');
     title.innerHTML = titleProject;
+    document.getElementById('project-index').innerHTML = index;
+  };
+
+  const showProjectButton = () => {
+    const projectButton = document.getElementById('add-project');
+    projectButton.classList.remove('d-none');
+    projectButton.classList.add('d-inline');
+  };
+
+  const showTodoButton = () => {
+    const todoButton = document.getElementById('add-todo');
+    todoButton.classList.remove('d-none');
+    todoButton.classList.add('d-inline');
+  };
+
+  const hideTodoForm = () => {
+    const todoAddForm = document.getElementById('form-todo');
+    todoAddForm.remove();
+    showTodoButton();
+    showProjectButton();
   };
 
   const renderProject = () => {
@@ -45,11 +65,13 @@ const domManipulation = (() => {
       projectName.classList.add('project-button');
       li.classList.add('d-flex', 'justify-content-between');
       li.append(projectName, deleteProject);
-      // li.appendChild(deleteProject);
       proj.appendChild(li);
       projectName.addEventListener('click', () => {
-        renderProjectTitle(project.projectName);
+        renderProjectHeader(project.projectName, projectListObject.projectList.indexOf(project));
         renderTodo(project.list);
+        showTodoButton();
+        showProjectButton();
+        hideProjectForm();
       });
 
       deleteProject.addEventListener('click', () => {
@@ -66,18 +88,30 @@ const domManipulation = (() => {
     });
   };
 
-  const hideForm = () => {
-    const projectAddForm = document.getElementById('form-project');
-    projectAddForm.remove();
-    const projectButton = document.getElementById('add-project');
-    projectButton.classList.remove('d-none');
-    projectButton.classList.add('d-inline');
+  const hideProjectForm = () => {
+    if (document.getElementById('form-project')) {
+      const projectAddForm = document.getElementById('form-project');
+      projectAddForm.remove();
+    }
+    showTodoButton();
+    showProjectButton();
   };
 
-  const renderFormProject = () => {
+  const hideFormButton = () => {
     const projectButton = document.getElementById('add-project');
     projectButton.classList.remove('d-inline');
     projectButton.classList.add('d-none');
+  };
+
+  const hideTodoButton = () => {
+    const todoButton = document.getElementById('add-todo');
+    todoButton.classList.remove('d-inline');
+    todoButton.classList.add('d-none');
+  };
+
+  const renderFormProject = () => {
+    hideFormButton();
+    hideTodoButton();
     const listProjects = document.getElementById('projects');
     const div = document.createElement('div');
     div.setAttribute('id', 'form-project');
@@ -90,21 +124,21 @@ const domManipulation = (() => {
     button.addEventListener('click', () => {
       const projectName = document.getElementById('form-project-name');
       addProject(projectName.value);
-      hideForm();
+      hideProjectForm();
       renderProject();
     });
 
     input.addEventListener('keypress', (e) => {
-      const projectName = document.getElementById('form-project-name');
-      if (e.code === 'Enter') {
+      if (e.code === 'Enter' || e.code === 'NumpadEnter') {
+        const projectName = document.getElementById('form-project-name');
         addProject(projectName.value);
-        hideForm();
+        hideProjectForm();
         renderProject();
       }
     });
 
     buttonCancel.innerHTML = 'Cancel';
-    buttonCancel.addEventListener('click', hideForm);
+    buttonCancel.addEventListener('click', hideProjectForm);
     div.appendChild(input);
     div.appendChild(button);
     div.appendChild(buttonCancel);
@@ -112,16 +146,82 @@ const domManipulation = (() => {
     input.focus();
   };
 
+  const renderFormTodo = () => {
+    hideFormButton();
+    hideTodoButton();
+    const listProjects = document.getElementById('todos');
+    const div = document.createElement('div');
+    div.setAttribute('id', 'form-todo');
+
+    const labelTitle = document.createElement('label');
+    labelTitle.innerHTML = 'Title: ';
+    const inputTitle = document.createElement('input');
+    inputTitle.setAttribute('id', 'form-todo-title');
+    const labelDescription = document.createElement('label');
+    labelDescription.innerHTML = 'Description: ';
+    const inputDescription = document.createElement('input');
+    inputDescription.setAttribute('id', 'form-todo-description');
+    const labelDueDate = document.createElement('label');
+    labelDueDate.innerHTML = 'Due Date: ';
+    const inputDueDate = document.createElement('input');
+    inputDueDate.setAttribute('id', 'form-todo-due-date');
+    inputDueDate.setAttribute('type', 'date');
+
+    const labelPriority = document.createElement('label');
+    labelPriority.innerHTML = 'Priority: ';
+    const selectPriority = document.createElement('select');
+    selectPriority.classList.add('select');
+    selectPriority.setAttribute('id', 'select');
+    const option1 = document.createElement('option');
+    option1.innerHTML = 'Low';
+    const option2 = document.createElement('option');
+    option2.innerHTML = 'Medium';
+    const option3 = document.createElement('option');
+    option3.innerHTML = 'High';
+    selectPriority.append(option1, option2, option3);
+
+    const button = document.createElement('button');
+    const buttonCancel = document.createElement('button');
+    button.innerHTML = 'Add';
+
+    button.addEventListener('click', () => {
+      const title = inputTitle.value;
+      const description = inputDescription.value;
+      const dueDate = inputDueDate.value;
+      console.log(selectPriority);
+      const priority = selectPriority.value;
+      const projectIndex = document.getElementById('project-index').innerHTML;
+      console.log(projectIndex);
+      addTodo(title, description, dueDate, priority, projectIndex);
+      hideTodoForm();
+      renderTodo(projectListObject.projectList[projectIndex].list);
+    });
+
+/*    input.addEventListener('keypress', (e) => {
+      if (e.code === 'Enter' || e.code === 'NumpadEnter') {
+        addProject(projectName.value);
+        hideTodoForm();
+        renderProject();
+      }
+    });
+*/
+    buttonCancel.innerHTML = 'Cancel';
+    buttonCancel.addEventListener('click', hideTodoForm);
+    div.append(labelTitle, inputTitle, labelDescription, inputDescription, labelDueDate, inputDueDate, labelPriority, selectPriority, button, buttonCancel);
+    listProjects.appendChild(div);
+    inputTitle.focus();
+  };
+
   const setButtonListeners = () => {
     const projectButton = document.getElementById('add-project');
     projectButton.addEventListener('click', renderFormProject);
+    const todoButton = document.getElementById('add-todo');
+    todoButton.addEventListener('click', renderFormTodo);
   };
 
   return {
     renderProject,
-    renderFormProject,
     setButtonListeners,
-    hideForm,
   };
 })();
 

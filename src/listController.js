@@ -1,6 +1,7 @@
 import Project from './classes/project';
 // import ProjectList from './classes/project_list';
 import projectListObject from './storageInfo';
+import Todo from './classes/todo';
 
 const localStorageUpdate = (dataInfo) => {
   localStorage.setItem('ProjectListObject', JSON.stringify(dataInfo));
@@ -19,4 +20,14 @@ const removeProject = (index) => {
   localStorageUpdate(dataInfo);
 };
 
-export { addProject, removeProject };
+const addTodo = (title, description, dueDate, priority, projectIndex) => {
+  const activity = new Todo(title, description, dueDate, priority);
+  projectListObject.projectList[projectIndex].addList(activity);
+  localStorageUpdate(projectListObject);
+};
+
+const removeTodo = () => {
+  localStorageUpdate(projectListObject);
+};
+
+export { addProject, removeProject, addTodo };
