@@ -32,6 +32,7 @@ const domManipulation = (() => {
       const singleTodo = document.createElement('div');
       const todoTitle = document.createElement('h3');
       todoTitle.innerHTML = todo.title;
+      const todoInfo = document.createElement('div');
       const todoDescription = document.createElement('p');
       todoDescription.innerHTML = todo.description;
       const todoDate = document.createElement('p');
@@ -40,9 +41,14 @@ const domManipulation = (() => {
       todoPriority.innerHTML = todo.priority;
       const todoDone = document.createElement('p');
       todoDone.innerHTML = todo.done;
+      todoInfo.append(todoDescription, todoDate, todoPriority);
 
       li.appendChild(singleTodo);
-      singleTodo.append(todoTitle, todoDescription, todoDate, todoPriority, todoDone, deleteTodo);
+      singleTodo.append(todoDone, todoTitle, todoInfo, deleteTodo);
+
+      todoTitle.addEventListener('click', () => {
+        todoInfo.classList.toggle('d-none');
+      });
 
       deleteTodo.addEventListener('click', () => {
         const projectIndex = document.getElementById('project-index').innerHTML;
@@ -143,29 +149,38 @@ const domManipulation = (() => {
     input.setAttribute('id', 'form-project-name');
     const button = document.createElement('button');
     const buttonCancel = document.createElement('button');
+    const errorMessage = document.createElement('span');
+    errorMessage.classList.add('d-none');
+    errorMessage.innerHTML = 'This field must not be empty';
     button.innerHTML = 'Add';
 
     button.addEventListener('click', () => {
       const projectName = document.getElementById('form-project-name');
-      addProject(projectName.value);
-      hideProjectForm();
-      renderProject();
-    });
-
-    input.addEventListener('keypress', (e) => {
-      if (e.code === 'Enter' || e.code === 'NumpadEnter') {
-        const projectName = document.getElementById('form-project-name');
+      if (projectName.value.trim() === '') {
+        errorMessage.classList.remove('d-none');
+      } else {
         addProject(projectName.value);
         hideProjectForm();
         renderProject();
       }
     });
 
+    input.addEventListener('keypress', (e) => {
+      if (e.code === 'Enter' || e.code === 'NumpadEnter') {
+        const projectName = document.getElementById('form-project-name');
+        if (projectName.value.trim() === '') {
+          errorMessage.classList.remove('d-none');
+        } else {
+          addProject(projectName.value);
+          hideProjectForm();
+          renderProject();
+        }
+      }
+    });
+
     buttonCancel.innerHTML = 'Cancel';
     buttonCancel.addEventListener('click', hideProjectForm);
-    div.appendChild(input);
-    div.appendChild(button);
-    div.appendChild(buttonCancel);
+    div.append(input, button, buttonCancel, errorMessage);
     listProjects.appendChild(div);
     input.focus();
   };
