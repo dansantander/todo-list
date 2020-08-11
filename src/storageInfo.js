@@ -8,19 +8,16 @@ function createDefaultProject() {
   const projectListDefault = new ProjectList();
   const today = new Date();
   const date = `${today.getFullYear()} - ${today.getMonth() + 1}-${today.getDate()}`;
-
-  const array = [];
   const projectNew = new Project('Default Project');
-  array.push(projectNew);
   const activity = new Todo('default', 'write your description', date, 1);
   projectNew.addList(activity);
   projectListDefault.addProjectsList(projectNew);
-  localStorage.setItem('myTodo', JSON.stringify(projectListDefault));
+  localStorage.setItem('ProjectListObject', JSON.stringify(projectListDefault));
 }
 
 function checkDataStorage() {
-  // localStorage.clear('myTodo');
-  const myLocalTodo = JSON.parse((localStorage.getItem('myTodo')));
+  // localStorage.clear('ProjectListObject');
+  const myLocalTodo = JSON.parse((localStorage.getItem('ProjectListObject')));
   myLocalTodo.projectList.forEach((project) => {
     const { projectName } = project;
     const projectNew = new Project(projectName);
@@ -38,8 +35,8 @@ function checkDataStorage() {
   return projectList;
 }
 
-//localStorage.clear('myTodo');
-if (!localStorage.getItem('myTodo')) {
+// localStorage.clear('ProjectListObject');
+if (!localStorage.getItem('ProjectListObject')) {
   createDefaultProject();
 }
 

@@ -1,5 +1,6 @@
-import addProject from '../listController';
-import projectListInfo from '../storageInfo';
+import { addProject, removeProject } from '../listController';
+// import addProject from '../listController';
+import projectListObject from '../storageInfo';
 
 const domManipulation = (() => {
   const renderTodo = (todos) => {
@@ -35,7 +36,7 @@ const domManipulation = (() => {
   const renderProject = () => {
     const proj = document.getElementById('projects');
     proj.innerHTML = '';
-    projectListInfo.projectList.forEach((project) => {
+    projectListObject.projectList.forEach((project) => {
       const li = document.createElement('li');
       const deleteProject = document.createElement('i');
       const projectName = document.createElement('div');
@@ -43,18 +44,19 @@ const domManipulation = (() => {
       projectName.innerHTML = project.projectName;
       projectName.classList.add('project-button');
       li.classList.add('d-flex', 'justify-content-between');
-      li.appendChild(projectName);
-      li.appendChild(deleteProject);
+      li.append(projectName, deleteProject);
+      // li.appendChild(deleteProject);
       proj.appendChild(li);
       projectName.addEventListener('click', () => {
         renderProjectTitle(project.projectName);
         renderTodo(project.list);
       });
+
       deleteProject.addEventListener('click', () => {
-        projectListInfo.removeProjectsList(projectListInfo.projectList.indexOf(project));
+        removeProject(projectListObject.projectList.indexOf(project));
         renderProject();
-        //projectListInfo.removeProjectsList();
       });
+
       deleteProject.addEventListener('mouseover', () => {
         deleteProject.classList = 'fas fa-times-circle';
       });
@@ -84,11 +86,23 @@ const domManipulation = (() => {
     const button = document.createElement('button');
     const buttonCancel = document.createElement('button');
     button.innerHTML = 'Add';
+
     button.addEventListener('click', () => {
-      addProject();
+      const projectName = document.getElementById('form-project-name');
+      addProject(projectName.value);
       hideForm();
       renderProject();
     });
+
+    input.addEventListener('keypress', (e) => {
+      const projectName = document.getElementById('form-project-name');
+      if (e.code === 'Enter') {
+        addProject(projectName.value);
+        hideForm();
+        renderProject();
+      }
+    });
+
     buttonCancel.innerHTML = 'Cancel';
     buttonCancel.addEventListener('click', hideForm);
     div.appendChild(input);

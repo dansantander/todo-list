@@ -1,13 +1,22 @@
 import Project from './classes/project';
-import ProjectList from './classes/project_list';
-import projectListInfo from './storageInfo';
+// import ProjectList from './classes/project_list';
+import projectListObject from './storageInfo';
 
-const addProject = () => {
-  const dataInfo = new ProjectList(projectListInfo);
-  const projectName = document.getElementById('form-project-name');
-  const projectNew = new Project(projectName.value);
-  dataInfo.addProjectsList(projectNew);
-  localStorage.setItem('myTodo', JSON.stringify(dataInfo));
+const localStorageUpdate = (dataInfo) => {
+  localStorage.setItem('ProjectListObject', JSON.stringify(dataInfo));
 };
 
-export default (addProject);
+const addProject = (value) => {
+  const dataInfo = projectListObject;
+  const projectNew = new Project(value);
+  dataInfo.addProjectsList(projectNew);
+  localStorageUpdate(dataInfo);
+};
+
+const removeProject = (index) => {
+  const dataInfo = projectListObject;
+  dataInfo.removeProjectsList(index);
+  localStorageUpdate(dataInfo);
+};
+
+export { addProject, removeProject };
