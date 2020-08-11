@@ -31,6 +31,21 @@ const removeTodo = (todoIndex, projectIndex) => {
   localStorageUpdate(projectListObject);
 };
 
+const changeTodo = (todoIndex, projectIndex, todoObject) => {
+  projectListObject.projectList[projectIndex].list[todoIndex].title = todoObject.title;
+  projectListObject.projectList[projectIndex].list[todoIndex].description = todoObject.description;
+  projectListObject.projectList[projectIndex].list[todoIndex].dueDate = todoObject.dueDate;
+  projectListObject.projectList[projectIndex].list[todoIndex].priority = todoObject.priority;
+  localStorageUpdate(projectListObject);
+};
+
+
+const toggleTodo = (todoIndex, projectIndex) => {
+  projectListObject.projectList[projectIndex].list[todoIndex].markAsDone();
+  localStorageUpdate(projectListObject);
+};
+
+
 export {
-  addProject, removeProject, addTodo, removeTodo,
+  addProject, removeProject, addTodo, removeTodo, toggleTodo, changeTodo,
 };
