@@ -8,7 +8,9 @@
 
 .logo {
   height: 150px;
-  width: 200px;
+  background-color: #010c18;
+  min-width: 200px;
+  width: 100%;
 }
 
 .project-title {
@@ -21,16 +23,11 @@
 }
 
 li {
-  padding: 0.5rem
+  padding: 0.5rem;
 }
 
 i {
   align-self: center;
-}
-
-.logo {
-  background-color: #010c18;
-  width: 100%;
 }
 
 .left-side {
@@ -45,11 +42,36 @@ i {
   width: 90%;
 }
 
-.left-button {
-  border: none;
+#projects li:hover {
+  background-color: #5e94ca63;
+}
+
+#form-project {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
 }
 
 #form-project-name {
   border-radius: 5px;
   border: none;
+  grid-column: 1/5;
+  justify-content: center;
+  margin-bottom: 8px;
+}
+
+.left-button {
+  border: none;
+  background-color: rgba(0, 255, 34, 0.719);
+  grid-column: 3/4;
+  margin: 0 5px;
+  border-radius: 5px;
+  color: rgb(211, 209, 209);
+}
+
+.right-button {
+  border: none;
+  background-color: rgb(207, 60, 50);
+  grid-column: 4/5;
+  border-radius: 5px;
+  color: rgb(211, 209, 209);
 }

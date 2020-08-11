@@ -253,7 +253,7 @@ const domManipulation = (() => {
     const listProjects = document.getElementById('projects');
     const div = document.createElement('div');
     div.setAttribute('id', 'form-project');
-    div.classList = 'd-flex flex-column px-2';
+    div.classList = 'px-2';
     const input = document.createElement('input');
     input.setAttribute('id', 'form-project-name');
     input.classList = 'align-self-center w-100 px-1';
@@ -264,7 +264,7 @@ const domManipulation = (() => {
     errorMessage.innerHTML = 'This field must not be empty';
     button.innerHTML = 'Add';
     button.classList.add('left-button');
-    buttonCancel.classList.add('left-button');
+    buttonCancel.classList.add('right-button');
 
     button.addEventListener('click', () => {
       const projectName = document.getElementById('form-project-name');
@@ -292,7 +292,7 @@ const domManipulation = (() => {
 
     buttonCancel.innerHTML = 'Cancel';
     buttonCancel.addEventListener('click', hideProjectForm);
-    div.append(input, button, buttonCancel, errorMessage);
+    div.append(input, errorMessage, button, buttonCancel);
     listProjects.appendChild(div);
     input.focus();
   };
