@@ -1,8 +1,23 @@
-import { addProject, removeProject, addTodo } from '../listController';
+import {
+  addProject, removeProject, addTodo, removeTodo,
+} from '../listController';
+
 // import addProject from '../listController';
 import projectListObject from '../storageInfo';
 
 const domManipulation = (() => {
+  const showProjectButton = () => {
+    const projectButton = document.getElementById('add-project');
+    projectButton.classList.remove('d-none');
+    projectButton.classList.add('d-inline');
+  };
+
+  const showTodoButton = () => {
+    const todoButton = document.getElementById('add-todo');
+    todoButton.classList.remove('d-none');
+    todoButton.classList.add('d-inline');
+  };
+
   const renderTodo = (todos) => {
     const clear = document.getElementById('todos');
     clear.innerHTML = '';
@@ -10,6 +25,9 @@ const domManipulation = (() => {
     todos.forEach((todo) => {
       const li = document.createElement('li');
       todoContainer.appendChild(li);
+
+      const deleteTodo = document.createElement('i');
+      deleteTodo.classList.add('far', 'fa-times-circle');
 
       const singleTodo = document.createElement('div');
       const todoTitle = document.createElement('h3');
@@ -24,7 +42,23 @@ const domManipulation = (() => {
       todoDone.innerHTML = todo.done;
 
       li.appendChild(singleTodo);
-      singleTodo.append(todoTitle, todoDescription, todoDate, todoPriority, todoDone);
+      singleTodo.append(todoTitle, todoDescription, todoDate, todoPriority, todoDone, deleteTodo);
+
+      deleteTodo.addEventListener('click', () => {
+        const projectIndex = document.getElementById('project-index').innerHTML;
+        const todoIndex = projectListObject.projectList[projectIndex].list.indexOf(todo);
+        removeTodo(todoIndex, projectIndex);
+        renderTodo(projectListObject.projectList[projectIndex].list);
+        showTodoButton();
+        showProjectButton();
+      });
+
+      deleteTodo.addEventListener('mouseover', () => {
+        deleteTodo.classList = 'fas fa-times-circle';
+      });
+      deleteTodo.addEventListener('mouseout', () => {
+        deleteTodo.classList = 'far fa-times-circle';
+      });
     });
   };
 
@@ -34,21 +68,18 @@ const domManipulation = (() => {
     document.getElementById('project-index').innerHTML = index;
   };
 
-  const showProjectButton = () => {
-    const projectButton = document.getElementById('add-project');
-    projectButton.classList.remove('d-none');
-    projectButton.classList.add('d-inline');
-  };
-
-  const showTodoButton = () => {
-    const todoButton = document.getElementById('add-todo');
-    todoButton.classList.remove('d-none');
-    todoButton.classList.add('d-inline');
-  };
-
   const hideTodoForm = () => {
     const todoAddForm = document.getElementById('form-todo');
     todoAddForm.remove();
+    showTodoButton();
+    showProjectButton();
+  };
+
+  const hideProjectForm = () => {
+    if (document.getElementById('form-project')) {
+      const projectAddForm = document.getElementById('form-project');
+      projectAddForm.remove();
+    }
     showTodoButton();
     showProjectButton();
   };
@@ -77,6 +108,8 @@ const domManipulation = (() => {
       deleteProject.addEventListener('click', () => {
         removeProject(projectListObject.projectList.indexOf(project));
         renderProject();
+        showTodoButton();
+        showProjectButton();
       });
 
       deleteProject.addEventListener('mouseover', () => {
@@ -86,15 +119,6 @@ const domManipulation = (() => {
         deleteProject.classList = 'far fa-times-circle';
       });
     });
-  };
-
-  const hideProjectForm = () => {
-    if (document.getElementById('form-project')) {
-      const projectAddForm = document.getElementById('form-project');
-      projectAddForm.remove();
-    }
-    showTodoButton();
-    showProjectButton();
   };
 
   const hideFormButton = () => {
@@ -188,26 +212,19 @@ const domManipulation = (() => {
       const title = inputTitle.value;
       const description = inputDescription.value;
       const dueDate = inputDueDate.value;
-      console.log(selectPriority);
+
       const priority = selectPriority.value;
       const projectIndex = document.getElementById('project-index').innerHTML;
-      console.log(projectIndex);
+
       addTodo(title, description, dueDate, priority, projectIndex);
       hideTodoForm();
       renderTodo(projectListObject.projectList[projectIndex].list);
     });
 
-/*    input.addEventListener('keypress', (e) => {
-      if (e.code === 'Enter' || e.code === 'NumpadEnter') {
-        addProject(projectName.value);
-        hideTodoForm();
-        renderProject();
-      }
-    });
-*/
     buttonCancel.innerHTML = 'Cancel';
     buttonCancel.addEventListener('click', hideTodoForm);
-    div.append(labelTitle, inputTitle, labelDescription, inputDescription, labelDueDate, inputDueDate, labelPriority, selectPriority, button, buttonCancel);
+    div.append(labelTitle, inputTitle, labelDescription, inputDescription,
+      labelDueDate, inputDueDate, labelPriority, selectPriority, button, buttonCancel);
     listProjects.appendChild(div);
     inputTitle.focus();
   };

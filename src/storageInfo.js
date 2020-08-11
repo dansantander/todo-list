@@ -9,7 +9,7 @@ function createDefaultProject() {
   const today = new Date();
   const date = `${today.getFullYear()} - ${today.getMonth() + 1}-${today.getDate()}`;
   const projectNew = new Project('Default Project');
-  const activity = new Todo('default', 'write your description', date, 1);
+  const activity = new Todo('default', 'write your description', date, 'Low');
   projectNew.addList(activity);
   projectListDefault.addProjectsList(projectNew);
   localStorage.setItem('ProjectListObject', JSON.stringify(projectListDefault));
@@ -34,7 +34,6 @@ function checkDataStorage() {
 
   return projectList;
 }
-
 // localStorage.clear('ProjectListObject');
 if (!localStorage.getItem('ProjectListObject')) {
   createDefaultProject();

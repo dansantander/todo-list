@@ -26,8 +26,11 @@ const addTodo = (title, description, dueDate, priority, projectIndex) => {
   localStorageUpdate(projectListObject);
 };
 
-const removeTodo = () => {
+const removeTodo = (todoIndex, projectIndex) => {
+  projectListObject.projectList[projectIndex].removeList(todoIndex);
   localStorageUpdate(projectListObject);
 };
 
-export { addProject, removeProject, addTodo };
+export {
+  addProject, removeProject, addTodo, removeTodo,
+};
