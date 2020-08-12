@@ -35,7 +35,7 @@ function checkDataStorage() {
   return projectList;
 }
 
-//localStorage.clear('ProjectListObject');
+// localStorage.clear('ProjectListObject');
 if (!localStorage.getItem('ProjectListObject')) {
   createDefaultProject();
 }

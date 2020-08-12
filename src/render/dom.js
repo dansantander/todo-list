@@ -306,9 +306,16 @@ const domManipulation = (() => {
         renderProject();
         showTodoButton();
         showProjectButton();
+
         if (String(removeIndex) === document.getElementById('project-index').innerHTML) {
           const projects = document.getElementsByClassName('project-button');
-          projects[projects.length - 1].click();
+          if (projects[projects.length - 1]) {
+            projects[projects.length - 1].click();
+          } else {
+            renderProjectHeader('', 0);
+            renderTodo([]);
+            document.getElementById('add-project').click();
+          }
         }
       });
 
