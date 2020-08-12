@@ -62,10 +62,6 @@ i {
   width: 90%;
 }
 
-#projects li:hover {
-  background-color: #5e94ca63;
-}
-
 #projects .project-button:hover,
 .title-container,
 .fa-times-circle,
@@ -115,6 +111,10 @@ i {
 
 .todos li:last-child {
   border: none;
+}
+
+#projects li:hover {
+  background-color: #5e94ca63;
 }
 
 .title-container {
