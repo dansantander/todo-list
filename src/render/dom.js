@@ -239,7 +239,7 @@ const domManipulation = (() => {
       deleteProject.classList.add('far', 'fa-times-circle');
       projectName.innerHTML = project.projectName;
       projectName.classList.add('project-button');
-      li.classList.add('d-flex', 'justify-content-between', 'px-3');
+      li.classList.add('d-flex', 'justify-content-between', 'px-3', 'py-3');
       li.append(projectName, deleteProject);
       proj.appendChild(li);
       projectName.addEventListener('click', () => {
