@@ -134,34 +134,53 @@ const domManipulation = (() => {
     const clear = document.getElementById('todos');
     clear.innerHTML = '';
     const todoContainer = document.getElementById('todos');
+    todoContainer.classList.add('todos');
     todos.forEach((todo) => {
       const li = document.createElement('li');
       todoContainer.appendChild(li);
 
+      const todoIcons = document.createElement('div');
+
+
       const deleteTodo = document.createElement('i');
-      deleteTodo.classList.add('far', 'fa-times-circle');
+      deleteTodo.classList.add('px-1', 'far', 'fa-times-circle');
 
       const editTodo = document.createElement('i');
-      editTodo.classList.add('far', 'fa-edit');
+      editTodo.classList.add('px-1', 'far', 'fa-edit');
+
+      todoIcons.append(editTodo, deleteTodo);
 
       const singleTodo = document.createElement('div');
+      singleTodo.classList.add('d-flex', 'align-items-center', 'justify-content-between');
+
+      const titleContainer = document.createElement('div');
+      titleContainer.classList.add('title-container', 'd-flex', 'align-items-center');
+
       const todoTitle = document.createElement('h3');
       todoTitle.innerHTML = todo.title;
+
       const todoInfo = document.createElement('div');
       todoInfo.classList.add('d-none');
+
       const todoDescription = document.createElement('p');
       todoDescription.innerHTML = todo.description;
+
       const todoDate = document.createElement('p');
       todoDate.innerHTML = todo.dueDate;
+
       const todoPriority = document.createElement('p');
       todoPriority.innerHTML = todo.priority;
+
       const todoDone = document.createElement('input');
       todoDone.setAttribute('type', 'checkbox');
+      todoDone.classList.add('mr-3');
       todoDone.checked = todo.done;
       todoInfo.append(todoDescription, todoDate, todoPriority);
 
       li.appendChild(singleTodo);
-      singleTodo.append(todoDone, todoTitle, todoInfo, editTodo, deleteTodo);
+      li.append(todoInfo);
+      titleContainer.append(todoDone, todoTitle);
+      singleTodo.append(titleContainer, todoIcons);
 
       todoTitle.addEventListener('click', () => {
         todoInfo.classList.toggle('d-none');
@@ -189,17 +208,17 @@ const domManipulation = (() => {
       });
 
       editTodo.addEventListener('mouseover', () => {
-        editTodo.classList = 'fas fa-edit';
+        editTodo.classList = 'px-1 fas fa-edit';
       });
       editTodo.addEventListener('mouseout', () => {
-        editTodo.classList = 'far fa-edit';
+        editTodo.classList = 'px-1 far fa-edit';
       });
 
       deleteTodo.addEventListener('mouseover', () => {
-        deleteTodo.classList = 'fas fa-times-circle';
+        deleteTodo.classList = 'px-1 fas fa-times-circle';
       });
       deleteTodo.addEventListener('mouseout', () => {
-        deleteTodo.classList = 'far fa-times-circle';
+        deleteTodo.classList = 'px-1 far fa-times-circle';
       });
     });
   };
@@ -220,7 +239,7 @@ const domManipulation = (() => {
       deleteProject.classList.add('far', 'fa-times-circle');
       projectName.innerHTML = project.projectName;
       projectName.classList.add('project-button');
-      li.classList.add('d-flex', 'justify-content-between');
+      li.classList.add('d-flex', 'justify-content-between', 'px-3');
       li.append(projectName, deleteProject);
       proj.appendChild(li);
       projectName.addEventListener('click', () => {
@@ -232,10 +251,15 @@ const domManipulation = (() => {
       });
 
       deleteProject.addEventListener('click', () => {
-        removeProject(projectListObject.projectList.indexOf(project));
+        const removeIndex = projectListObject.projectList.indexOf(project);
+        removeProject(removeIndex);
         renderProject();
         showTodoButton();
         showProjectButton();
+        if (String(removeIndex) === document.getElementById('project-index').innerHTML) {
+          const projects = document.getElementsByClassName('project-button');
+          projects[projects.length - 1].click();
+        }
       });
 
       deleteProject.addEventListener('mouseover', () => {
@@ -274,6 +298,8 @@ const domManipulation = (() => {
         addProject(projectName.value);
         hideProjectForm();
         renderProject();
+        const projects = document.getElementsByClassName('project-button');
+        projects[projects.length - 1].click();
       }
     });
 
@@ -286,6 +312,8 @@ const domManipulation = (() => {
           addProject(projectName.value);
           hideProjectForm();
           renderProject();
+          const projects = document.getElementsByClassName('project-button');
+          projects[projects.length - 1].click();
         }
       }
     });
@@ -301,32 +329,41 @@ const domManipulation = (() => {
     hideFormButton();
     hideTodoButton();
     const listProjects = document.getElementById('todos');
-    const div = document.createElement('div');
-    div.setAttribute('id', 'form-todo');
+    const formContainer = document.createElement('div');
+    formContainer.setAttribute('id', 'form-todo');
 
     const labelTitle = document.createElement('label');
-    labelTitle.innerHTML = 'Title: ';
+    labelTitle.innerHTML = 'Title';
+
     const inputTitle = document.createElement('input');
     inputTitle.setAttribute('id', 'form-todo-title');
+
     const labelDescription = document.createElement('label');
-    labelDescription.innerHTML = 'Description: ';
+    labelDescription.innerHTML = 'Description ';
+
     const inputDescription = document.createElement('input');
     inputDescription.setAttribute('id', 'form-todo-description');
+
     const labelDueDate = document.createElement('label');
-    labelDueDate.innerHTML = 'Due Date: ';
+    labelDueDate.innerHTML = 'Due Date ';
+
     const inputDueDate = document.createElement('input');
     inputDueDate.setAttribute('id', 'form-todo-due-date');
     inputDueDate.setAttribute('type', 'date');
 
     const labelPriority = document.createElement('label');
-    labelPriority.innerHTML = 'Priority: ';
+    labelPriority.innerHTML = 'Priority ';
+
     const selectPriority = document.createElement('select');
     selectPriority.classList.add('select');
     selectPriority.setAttribute('id', 'select');
+
     const option1 = document.createElement('option');
     option1.innerHTML = 'Low';
+
     const option2 = document.createElement('option');
     option2.innerHTML = 'Medium';
+
     const option3 = document.createElement('option');
     option3.innerHTML = 'High';
     selectPriority.append(option1, option2, option3);
@@ -334,6 +371,30 @@ const domManipulation = (() => {
     const button = document.createElement('button');
     const buttonCancel = document.createElement('button');
     button.innerHTML = 'Add';
+    buttonCancel.innerHTML = 'Cancel';
+    button.classList.add('form-btn', 'left-button');
+    buttonCancel.classList.add('form-btn', 'right-button');
+
+    const titleContainer = document.createElement('div');
+    titleContainer.classList.add('title-container');
+    titleContainer.append(labelTitle, inputTitle);
+
+    const descriptionContainer = document.createElement('div');
+    descriptionContainer.classList.add('description-container');
+    descriptionContainer.append(labelDescription, inputDescription);
+
+    const dateContainer = document.createElement('div');
+    dateContainer.classList.add('date-container');
+    dateContainer.append(labelDueDate, inputDueDate);
+
+    const priorityContainer = document.createElement('div');
+    priorityContainer.classList.add('priority-container');
+    priorityContainer.append(labelPriority, selectPriority);
+
+    const buttonContainer = document.createElement('div');
+    buttonContainer.classList.add('priority-container');
+    buttonContainer.append(button, buttonCancel);
+
 
     button.addEventListener('click', () => {
       const title = inputTitle.value;
@@ -350,11 +411,13 @@ const domManipulation = (() => {
       allTodo.lastChild.lastChild.children[1].click();
     });
 
-    buttonCancel.innerHTML = 'Cancel';
     buttonCancel.addEventListener('click', hideTodoForm);
-    div.append(labelTitle, inputTitle, labelDescription, inputDescription,
-      labelDueDate, inputDueDate, labelPriority, selectPriority, button, buttonCancel);
-    listProjects.appendChild(div);
+
+    formContainer.append(titleContainer, descriptionContainer,
+      dateContainer, priorityContainer, buttonContainer);
+
+    listProjects.appendChild(formContainer);
+
     inputTitle.focus();
   };
 
