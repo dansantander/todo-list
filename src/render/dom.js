@@ -57,50 +57,63 @@ const domManipulation = (() => {
 
     const liContainers = document.getElementById('todos').childNodes;
     for (let i = 0; i < liContainers.length; i += 1) {
-      liContainers[i].lastChild.classList.remove('d-none');
       if (i === indexTodo) {
         liContainers[i].lastChild.classList.add('d-none');
       }
     }
 
-    const div = document.createElement('div');
-    div.setAttribute('id', 'form-todo');
+    const activity = projectListObject.projectList[indexProject].list[indexTodo];
+
+    const formContainer = document.createElement('div');
+    formContainer.setAttribute('id', 'form-todo');
 
     const labelTitle = document.createElement('label');
-    labelTitle.innerHTML = 'Title: ';
+    labelTitle.innerHTML = 'Title';
+
     const inputTitle = document.createElement('input');
-    const activity = projectListObject.projectList[indexProject].list[indexTodo];
     inputTitle.value = activity.title;
     inputTitle.setAttribute('id', 'form-todo-title');
+
     const labelDescription = document.createElement('label');
-    labelDescription.innerHTML = 'Description: ';
+    labelDescription.innerHTML = 'Description ';
+
     const inputDescription = document.createElement('input');
     inputDescription.setAttribute('id', 'form-todo-description');
+
     inputDescription.value = activity.description;
     const labelDueDate = document.createElement('label');
-    labelDueDate.innerHTML = 'Due Date: ';
+
+    labelDueDate.innerHTML = 'Due Date ';
     const inputDueDate = document.createElement('input');
+
     inputDueDate.setAttribute('id', 'form-todo-due-date');
     inputDueDate.setAttribute('type', 'date');
     inputDueDate.value = activity.dueDate;
 
     const labelPriority = document.createElement('label');
-    labelPriority.innerHTML = 'Priority: ';
+    labelPriority.innerHTML = 'Priority ';
+
     const selectPriority = document.createElement('select');
     selectPriority.classList.add('select');
     selectPriority.setAttribute('id', 'select');
+
     const option1 = document.createElement('option');
     option1.innerHTML = 'Low';
+
     const option2 = document.createElement('option');
     option2.innerHTML = 'Medium';
+
     const option3 = document.createElement('option');
     option3.innerHTML = 'High';
+
     selectPriority.append(option1, option2, option3);
     selectPriority.value = activity.priority;
 
     const button = document.createElement('button');
     const buttonCancel = document.createElement('button');
     button.innerHTML = 'Change';
+    button.classList.add('form-btn', 'left-button');
+    buttonCancel.classList.add('form-btn', 'right-button');
 
     button.addEventListener('click', () => {
       const title = inputTitle.value;
@@ -114,19 +127,39 @@ const domManipulation = (() => {
       // eslint-disable-next-line no-use-before-define
       renderTodo(projectListObject.projectList[indexProject].list);
       const allTodo = document.getElementById('todos');
-      allTodo.children[indexTodo].lastChild.children[1].click();
+      allTodo.children[indexTodo].firstChild.firstChild.children[1].click();
     });
 
     buttonCancel.innerHTML = 'Cancel';
+
+    const titleContainer = document.createElement('div');
+    titleContainer.classList.add('title-container');
+    titleContainer.append(labelTitle, inputTitle);
+
+    const descriptionContainer = document.createElement('div');
+    descriptionContainer.classList.add('description-container');
+    descriptionContainer.append(labelDescription, inputDescription);
+
+    const dateContainer = document.createElement('div');
+    dateContainer.classList.add('date-container');
+    dateContainer.append(labelDueDate, inputDueDate);
+
+    const priorityContainer = document.createElement('div');
+    priorityContainer.classList.add('priority-container');
+    priorityContainer.append(labelPriority, selectPriority);
+
+    const buttonContainer = document.createElement('div');
+    buttonContainer.classList.add('priority-container');
+    buttonContainer.append(button, buttonCancel);
 
     buttonCancel.addEventListener('click', () => {
       hideTodoForm();
       liContainers[indexTodo].lastChild.classList.remove('d-none');
     });
 
-    div.append(labelTitle, inputTitle, labelDescription, inputDescription,
-      labelDueDate, inputDueDate, labelPriority, selectPriority, button, buttonCancel);
-    liContainers[indexTodo].appendChild(div);
+    formContainer.append(titleContainer, descriptionContainer,
+      dateContainer, priorityContainer, buttonContainer);
+    liContainers[indexTodo].appendChild(formContainer);
     inputTitle.focus();
   };
 
@@ -162,20 +195,37 @@ const domManipulation = (() => {
       const todoInfo = document.createElement('div');
       todoInfo.classList.add('d-none');
 
-      const todoDescription = document.createElement('p');
+      const containerDescription = document.createElement('div');
+      containerDescription.classList.add('mb-4');
+      const labelInfoDescription = document.createElement('h5');
+      labelInfoDescription.innerHTML = 'Description&nbsp;';
+      const todoDescription = document.createElement('span');
       todoDescription.innerHTML = todo.description;
 
-      const todoDate = document.createElement('p');
+      containerDescription.append(labelInfoDescription, todoDescription);
+
+      const containerDueDate = document.createElement('div');
+      containerDueDate.classList.add('mb-4');
+      const labelInfoDueDate = document.createElement('h5');
+      labelInfoDueDate.innerHTML = 'Due Date&nbsp;';
+      const todoDate = document.createElement('span');
       todoDate.innerHTML = todo.dueDate;
 
-      const todoPriority = document.createElement('p');
+      containerDueDate.append(labelInfoDueDate, todoDate);
+
+      const containerPriority = document.createElement('div');
+      const labelInfoPriority = document.createElement('h5');
+      labelInfoPriority.innerHTML = 'Priority&nbsp;';
+      const todoPriority = document.createElement('span');
       todoPriority.innerHTML = todo.priority;
+
+      containerPriority.append(labelInfoPriority, todoPriority);
 
       const todoDone = document.createElement('input');
       todoDone.setAttribute('type', 'checkbox');
       todoDone.classList.add('mr-3');
       todoDone.checked = todo.done;
-      todoInfo.append(todoDescription, todoDate, todoPriority);
+      todoInfo.append(containerDescription, containerDueDate, containerPriority);
 
       li.appendChild(singleTodo);
       li.append(todoInfo);
